@@ -11,8 +11,8 @@
     <section class="hero">
       <div>
         <p class="eyebrow">MADRING AI DRIVER</p>
-        <h1>Watch a neural population learn to drive.</h1>
-        <p class="lede">Train from zero, save neural memories, and jump back to earlier generations to see how the driver evolved.</p>
+        <h1>Watch an AI learn Madrid’s new F1 circuit.</h1>
+        <p class="lede">The main camera follows the best live driver while the minimap keeps the complete MADRING layout visible.</p>
       </div>
       <div class="controls">
         <button id="toggleRun">Pause</button>
@@ -39,8 +39,10 @@
     </section>
 
     <section class="canvas-wrap">
-      <canvas id="sim" width="1100" height="700" aria-label="Top-down autonomous driving simulation"></canvas>
+      <canvas id="sim" width="820" height="920" aria-label="Top-down autonomous driving simulation on the MADRING circuit"></canvas>
     </section>
+
+    <p class="sim-note">Follow camera · car kept facing forward · full-circuit minimap in the upper-left corner.</p>
 
     <section class="memory-panel">
       <div class="memory-heading">
@@ -58,7 +60,7 @@
       <p id="memoryStatus" class="memory-status">Automatic memories will appear at generations 1, 5, 10, 25, 50, 100 and every 50 generations after that.</p>
     </section>
 
-    <p class="note">Track geometry is traced from the MADRING reference supplied for this project and converted into simulator geometry for sensors, collisions and training.</p>
+    <p class="note">MADRING geometry is vectorized from the supplied circuit silhouette and used directly for rendering, sensors, collisions and training.</p>
   </main>
 
   <script type="module" src="./src/main.js"></script>
