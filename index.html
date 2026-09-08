@@ -12,11 +12,12 @@
       <div>
         <p class="eyebrow">MADRING AI DRIVER</p>
         <h1>Watch a neural population learn to drive.</h1>
-        <p class="lede">A browser-based top-down autonomous-driving experiment inspired by Madrid's new Formula 1 circuit.</p>
+        <p class="lede">Train from zero, save neural memories, and jump back to earlier generations to see how the driver evolved.</p>
       </div>
       <div class="controls">
         <button id="toggleRun">Pause</button>
-        <button id="resetRun" class="secondary">Reset</button>
+        <button id="resetRun" class="secondary">Reset training</button>
+        <button id="saveMemory" class="secondary">Save memory</button>
         <label>
           Speed
           <select id="speedSelect">
@@ -34,13 +35,30 @@
       <div><span>Alive</span><strong id="alive">0</strong></div>
       <div><span>Best progress</span><strong id="bestProgress">0%</strong></div>
       <div><span>Best fitness</span><strong id="bestFitness">0</strong></div>
+      <div><span>Best laps</span><strong id="bestLaps">0</strong></div>
     </section>
 
     <section class="canvas-wrap">
       <canvas id="sim" width="1100" height="700" aria-label="Top-down autonomous driving simulation"></canvas>
     </section>
 
-    <p class="note">Track geometry is traced from the MADRING reference supplied for this project and converted into clean simulator geometry for sensors, collisions and training.</p>
+    <section class="memory-panel">
+      <div class="memory-heading">
+        <div>
+          <p class="eyebrow">TRAINING MEMORY</p>
+          <h2>Neural checkpoints</h2>
+          <p class="memory-copy">Snapshots store the best genome from that moment. Replay an old memory without deleting the current training.</p>
+        </div>
+        <div class="memory-actions">
+          <button id="resumeTraining" class="secondary" disabled>Return to current training</button>
+          <button id="clearMemories" class="secondary danger">Clear memories</button>
+        </div>
+      </div>
+      <div id="memoryTimeline" class="memory-timeline" aria-live="polite"></div>
+      <p id="memoryStatus" class="memory-status">Automatic memories will appear at generations 1, 5, 10, 25, 50, 100 and every 50 generations after that.</p>
+    </section>
+
+    <p class="note">Track geometry is traced from the MADRING reference supplied for this project and converted into simulator geometry for sensors, collisions and training.</p>
   </main>
 
   <script type="module" src="./src/main.js"></script>
