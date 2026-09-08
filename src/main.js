@@ -16,14 +16,44 @@ const SENSOR_RANGE = 115;
 const CAR_LENGTH = 14;
 const MAX_STEPS = 1600;
 
+// MADRING centerline traced from the reference image supplied for this project.
+// This is intentionally stored as clean simulator geometry instead of using the
+// raster image directly, so collision, sensors and progress work on the track.
 const track = {
   center: [
-    [180, 500],[145, 430],[160, 350],[220, 285],[310, 250],[420, 260],[500, 305],
-    [555, 355],[625, 330],[700, 270],[790, 240],[900, 245],[980, 290],[1005, 350],
-    [965, 395],[880, 410],[795, 395],[730, 355],[660, 390],[615, 455],[555, 500],
-    [475, 525],[390, 535],[300, 525],[230, 515]
+    [103.2,481.6],
+    [164.0,305.6],
+    [151.2,276.8],
+    [173.6,251.2],
+    [404.0,200.0],
+    [493.6,200.0],
+    [576.8,222.4],
+    [688.8,209.6],
+    [727.2,219.2],
+    [813.6,216.0],
+    [845.6,222.4],
+    [880.8,244.8],
+    [967.2,244.8],
+    [996.0,267.2],
+    [986.4,289.6],
+    [941.6,296.0],
+    [800.8,232.0],
+    [778.4,232.0],
+    [727.2,260.8],
+    [637.6,257.6],
+    [608.8,276.8],
+    [592.8,337.6],
+    [506.4,356.8],
+    [493.6,369.6],
+    [487.2,411.2],
+    [464.8,427.2],
+    [295.2,430.4],
+    [285.6,436.8],
+    [282.4,484.8],
+    [266.4,494.4],
+    [119.2,494.4]
   ],
-  halfWidth: 42,
+  halfWidth: 31,
 };
 
 function lerp(a,b,t){ return a+(b-a)*t; }
@@ -162,20 +192,41 @@ function evolve(){
   population=next; generation++;
 }
 
+function traceTrackPath(){
+  ctx.beginPath();
+  track.center.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));
+  ctx.closePath();
+}
+
 function drawTrack(){
-  ctx.fillStyle='#0c1118'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#08131d'; ctx.fillRect(0,0,W,H);
   ctx.lineCap='round'; ctx.lineJoin='round';
-  ctx.strokeStyle='#2c3947'; ctx.lineWidth=track.halfWidth*2+14;
-  ctx.beginPath(); track.center.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p)); ctx.closePath(); ctx.stroke();
-  ctx.strokeStyle='#9f7c50'; ctx.lineWidth=track.halfWidth*2;
-  ctx.beginPath(); track.center.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p)); ctx.closePath(); ctx.stroke();
-  ctx.strokeStyle='#f2f2f2'; ctx.lineWidth=2;
-  ctx.beginPath(); track.center.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p)); ctx.closePath(); ctx.stroke();
+
+  // Outer safety/runoff edge.
+  ctx.strokeStyle='#172838'; ctx.lineWidth=track.halfWidth*2+18;
+  traceTrackPath(); ctx.stroke();
+
+  // Asphalt.
+  ctx.strokeStyle='#4f5357'; ctx.lineWidth=track.halfWidth*2;
+  traceTrackPath(); ctx.stroke();
+
+  // White track edges.
+  ctx.strokeStyle='#f4f4f1'; ctx.lineWidth=track.halfWidth*2+4;
+  traceTrackPath(); ctx.stroke();
+  ctx.strokeStyle='#4f5357'; ctx.lineWidth=track.halfWidth*2-4;
+  traceTrackPath(); ctx.stroke();
+
+  // Subtle center guide for development/debugging.
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.lineWidth=1;
+  traceTrackPath(); ctx.stroke();
 
   const p=track.center[0], q=track.center[1];
   const ang=Math.atan2(q[1]-p[1],q[0]-p[0])+Math.PI/2;
   ctx.strokeStyle='#fff'; ctx.lineWidth=5; ctx.setLineDash([5,5]);
-  ctx.beginPath(); ctx.moveTo(p[0]+Math.cos(ang)*track.halfWidth,p[1]+Math.sin(ang)*track.halfWidth); ctx.lineTo(p[0]-Math.cos(ang)*track.halfWidth,p[1]-Math.sin(ang)*track.halfWidth); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(p[0]+Math.cos(ang)*track.halfWidth,p[1]+Math.sin(ang)*track.halfWidth);
+  ctx.lineTo(p[0]-Math.cos(ang)*track.halfWidth,p[1]-Math.sin(ang)*track.halfWidth);
+  ctx.stroke(); ctx.setLineDash([]);
 }
 
 function frame(){
