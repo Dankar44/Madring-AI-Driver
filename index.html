@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Madring AI Driver</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">MADRING AI DRIVER</p>
+        <h1>Watch a neural population learn to drive.</h1>
+        <p class="lede">A browser-based top-down autonomous-driving experiment inspired by Madrid's new Formula 1 circuit.</p>
+      </div>
+      <div class="controls">
+        <button id="toggleRun">Pause</button>
+        <button id="resetRun" class="secondary">Reset</button>
+        <label>
+          Speed
+          <select id="speedSelect">
+            <option value="1">1x</option>
+            <option value="5">5x</option>
+            <option value="20">20x</option>
+            <option value="50">50x</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="stats" aria-live="polite">
+      <div><span>Generation</span><strong id="generation">1</strong></div>
+      <div><span>Alive</span><strong id="alive">0</strong></div>
+      <div><span>Best progress</span><strong id="bestProgress">0%</strong></div>
+      <div><span>Best fitness</span><strong id="bestFitness">0</strong></div>
+    </section>
+
+    <section class="canvas-wrap">
+      <canvas id="sim" width="1100" height="700" aria-label="Top-down autonomous driving simulation"></canvas>
+    </section>
+
+    <p class="note">MVP track geometry is schematic while a verified MADRING outline is being integrated.</p>
+  </main>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
