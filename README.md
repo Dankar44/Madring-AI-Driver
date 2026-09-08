@@ -2,22 +2,34 @@
 
 Interactive 2D autonomous-driving experiment inspired by MADRING, Madrid's new Formula 1 circuit.
 
-The goal is to train virtual cars from scratch using reinforcement-learning / neuroevolution ideas, while making the learning process visible: sensors, crashes, generations, progress, best lap and racing line.
+The goal is to train virtual cars from scratch using population-based neural evolution while making the learning process visible: sensors, crashes, generations, progress, laps and historical neural memories.
 
-## Status
+## Current MVP
 
-Early MVP in development.
-
-## Planned MVP
-
-- 2D top-down track
+- top-down MADRING track geometry traced from the supplied reference
 - simple vehicle physics
-- ray-cast sensors
+- 7 ray-cast sensors
 - collision / off-track detection
-- checkpoints and progress score
+- progress scoring and lap detection
 - population-based neural controllers
-- generations and mutation
-- training speed controls
-- best-agent replay
+- generations, elite selection and mutation
+- 1x / 5x / 20x / 50x training speeds
+- automatic neural-memory snapshots at generations 1, 5, 10, 25, 50, 100 and every 50 generations afterwards
+- manual memory snapshots
+- persistent browser storage for saved memories
+- replay of an old neural brain without destroying the live training state
 
-> The first version uses a schematic MADRING-like track while the project integrates a cleaner verified circuit outline.
+## Neural memories
+
+A memory checkpoint stores the best controller genome from a point in training together with its generation, fitness, progress and completed laps. This makes it possible to compare an early "dumb" driver with a medium-trained driver and a later, more capable driver.
+
+Saved memories persist in the browser via localStorage. Resetting the live training does not delete them; they are only removed with the dedicated **Clear memories** control.
+
+## Next
+
+- smooth/refine the MADRING geometry
+- explicit sector/checkpoint gates around the lap
+- more robust anti-cheat progress scoring
+- richer vehicle physics and braking behavior
+- training graphs and side-by-side brain comparison
+- racing-line history and best-lap replay
