@@ -19,8 +19,13 @@ button.danger { border-color: #553039; color: #e9b5bd; }
 .stats > div { border: 1px solid #1c2634; border-radius: 12px; padding: 14px; background: #0b111a; }
 .stats span { display: block; color: #7f92a7; font-size: 12px; margin-bottom: 5px; }
 .stats strong { font-size: 22px; }
-.canvas-wrap { overflow: hidden; border: 1px solid #1b2735; border-radius: 16px; background: #b8a097; max-width: 820px; margin: 0 auto; }
-canvas { display: block; width: 100%; height: auto; aspect-ratio: 41 / 46; }
+.canvas-wrap { position: relative; overflow: hidden; border: 1px solid #1b2735; border-radius: 16px; background: #b8a097; max-width: 820px; margin: 0 auto; perspective: 1250px; isolation: isolate; transition: background .35s ease, box-shadow .35s ease; }
+.canvas-wrap::before { content: ""; position: absolute; inset: 10% 10% 4%; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,.36) 0%, rgba(0,0,0,.13) 48%, transparent 72%); filter: blur(18px); transform: translateY(24%); transition: opacity .35s ease; }
+canvas { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 41 / 46; transform-origin: 50% 68%; backface-visibility: hidden; transition: transform .42s cubic-bezier(.2,.8,.2,1), filter .35s ease, box-shadow .35s ease; }
+.canvas-wrap.top-view canvas { transform: none; }
+.canvas-wrap.isometric-view { background: linear-gradient(180deg, #8d7770 0%, #ad938a 34%, #b8a097 100%); box-shadow: inset 0 20px 40px rgba(0,0,0,.12); }
+.canvas-wrap.isometric-view::before { opacity: 1; }
+.canvas-wrap.isometric-view canvas { transform: translateY(5%) rotateX(47deg) scale(1.055); filter: saturate(1.08) contrast(1.035) brightness(.98); box-shadow: 0 46px 44px rgba(0,0,0,.34); }
 .sim-note { max-width: 820px; margin: 8px auto 0; color: #71859a; font-size: 12px; }
 .memory-panel { margin-top: 18px; border: 1px solid #1c2634; border-radius: 16px; padding: 18px; background: #0b111a; }
 .memory-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; }
@@ -46,4 +51,5 @@ canvas { display: block; width: 100%; height: auto; aspect-ratio: 41 / 46; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .memory-heading { align-items: start; flex-direction: column; }
   .memory-actions { justify-content: flex-start; }
+  .canvas-wrap.isometric-view canvas { transform: translateY(4%) rotateX(44deg) scale(1.04); }
 }
