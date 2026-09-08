@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Madring AI Driver</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=4" />
 </head>
 <body>
   <main class="app-shell">
@@ -45,7 +45,7 @@
       <div><span>Best laps</span><strong id="bestLaps">0</strong></div>
     </section>
 
-    <section class="canvas-wrap" id="canvasWrap">
+    <section class="canvas-wrap top-view" id="canvasWrap">
       <canvas id="sim" width="820" height="920" aria-label="Autonomous driving simulation on the MADRING circuit"></canvas>
     </section>
 
@@ -70,6 +70,6 @@
     <p class="note">MADRING geometry is vectorized from the supplied circuit silhouette and used directly for rendering, sensors, collisions and training.</p>
   </main>
 
-  <script type="module" src="./src/view-mode.js?v=1"></script>
+  <script type="module" src="./src/view-mode.js?v=4"></script>
 </body>
 </html>
