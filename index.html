@@ -74,10 +74,12 @@
       <p id="memoryStatus" class="memory-status">Automatic memories will appear at generations 1, 5, 10, 25, 50, 100 and every 50 generations after that.</p>
     </section>
 
-    <p class="note">The AI and collision model are unchanged. The 3D layer now adds a darker asphalt surface, cleaner painted edges, curved apex kerbs, trackside grandstands, urban building clusters, service areas and vegetation.</p>
+    <p class="note">The AI and collision model are unchanged. In 3D, the scenery module is now loaded deterministically before the simulator so the darker circuit, green terrain, stands, urban blocks and vegetation are actually attached to the WebGL scene.</p>
   </main>
 
-  <script type="module" src="./src/environment-v6.js?v=1"></script>
-  <script type="module" src="./src/app-v5.js?v=2"></script>
+  <script type="module">
+    await import('./src/environment-v7.js?v=1');
+    await import('./src/app-v5.js?v=3');
+  </script>
 </body>
 </html>
