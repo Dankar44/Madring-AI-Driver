@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Madring AI Driver</title>
-  <link rel="stylesheet" href="./styles.css?v=5" />
+  <link rel="stylesheet" href="./styles.css?v=6" />
 </head>
 <body>
   <main class="app-shell">
@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">MADRING AI DRIVER</p>
         <h1>Watch an AI learn Madrid’s new F1 circuit.</h1>
-        <p class="lede">Switch between the live top-down follow camera and a true orthographic isometric projection of the same simulation.</p>
+        <p class="lede">Switch between a 2D training view and a real 3D orthographic isometric scene.</p>
       </div>
       <div class="controls">
         <button id="toggleRun">Pause</button>
@@ -31,7 +31,7 @@
           View
           <select id="viewSelect">
             <option value="top">Top-down</option>
-            <option value="iso">Isometric 45° / 30°</option>
+            <option value="iso">3D isometric</option>
           </select>
         </label>
       </div>
@@ -45,11 +45,18 @@
       <div><span>Best laps</span><strong id="bestLaps">0</strong></div>
     </section>
 
-    <section class="canvas-wrap" id="canvasWrap">
-      <canvas id="sim" width="820" height="920" aria-label="Autonomous driving simulation on the MADRING circuit"></canvas>
+    <section class="canvas-wrap top-view" id="canvasWrap">
+      <canvas id="sim" width="820" height="920" aria-label="Top-down autonomous driving simulation on MADRING"></canvas>
+      <canvas id="threeSim" width="820" height="920" aria-label="3D orthographic autonomous driving simulation on MADRING"></canvas>
+      <canvas id="sensorOverlay" width="820" height="920" aria-hidden="true"></canvas>
+      <div class="scene-hud" aria-hidden="true">
+        <canvas id="minimap" width="205" height="112"></canvas>
+        <div id="sceneTitle" class="scene-title">AI LEARNS MADRING</div>
+        <div id="sceneCounter" class="scene-counter">GEN 1 · 1x · LAPS 0</div>
+      </div>
     </section>
 
-    <p class="sim-note"><span id="viewStatus">Top-down follow view</span> · orthographic isometric mode has no vanishing point · sensors and car share the road projection · HUD remains 2D.</p>
+    <p class="sim-note"><span id="viewStatus">Top-down view</span> · fixed flat HUD · numbered lidar sensors · F1-style car · full-circuit minimap.</p>
 
     <section class="memory-panel">
       <div class="memory-heading">
@@ -67,9 +74,9 @@
       <p id="memoryStatus" class="memory-status">Automatic memories will appear at generations 1, 5, 10, 25, 50, 100 and every 50 generations after that.</p>
     </section>
 
-    <p class="note">MADRING geometry is vectorized from the supplied circuit silhouette and used directly for rendering, sensors, collisions and training.</p>
+    <p class="note">The 3D mode uses actual WebGL meshes with an orthographic camera. The minimap, title and counters stay as separate 2D overlays.</p>
   </main>
 
-  <script type="module" src="./src/main-v3.js?v=1"></script>
+  <script type="module" src="./src/app-v3.js?v=1"></script>
 </body>
 </html>
