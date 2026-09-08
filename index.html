@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Madring AI Driver</title>
-  <link rel="stylesheet" href="./styles.css?v=4" />
+  <link rel="stylesheet" href="./styles.css?v=5" />
 </head>
 <body>
   <main class="app-shell">
@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">MADRING AI DRIVER</p>
         <h1>Watch an AI learn Madrid’s new F1 circuit.</h1>
-        <p class="lede">The main camera follows the best live driver while the minimap keeps the complete MADRING layout visible.</p>
+        <p class="lede">Switch between the live top-down follow camera and a true orthographic isometric projection of the same simulation.</p>
       </div>
       <div class="controls">
         <button id="toggleRun">Pause</button>
@@ -31,7 +31,7 @@
           View
           <select id="viewSelect">
             <option value="top">Top-down</option>
-            <option value="iso">Isometric</option>
+            <option value="iso">Isometric 45° / 30°</option>
           </select>
         </label>
       </div>
@@ -45,11 +45,11 @@
       <div><span>Best laps</span><strong id="bestLaps">0</strong></div>
     </section>
 
-    <section class="canvas-wrap top-view" id="canvasWrap">
+    <section class="canvas-wrap" id="canvasWrap">
       <canvas id="sim" width="820" height="920" aria-label="Autonomous driving simulation on the MADRING circuit"></canvas>
     </section>
 
-    <p class="sim-note"><span id="viewStatus">Top-down view</span> · follow camera · numbered distance sensors · F1-style car · full-circuit minimap.</p>
+    <p class="sim-note"><span id="viewStatus">Top-down follow view</span> · orthographic isometric mode has no vanishing point · sensors and car share the road projection · HUD remains 2D.</p>
 
     <section class="memory-panel">
       <div class="memory-heading">
@@ -70,6 +70,6 @@
     <p class="note">MADRING geometry is vectorized from the supplied circuit silhouette and used directly for rendering, sensors, collisions and training.</p>
   </main>
 
-  <script type="module" src="./src/view-mode.js?v=4"></script>
+  <script type="module" src="./src/main-v3.js?v=1"></script>
 </body>
 </html>
