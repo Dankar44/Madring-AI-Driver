@@ -6,21 +6,42 @@ button, select { font: inherit; }
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; margin-bottom: 20px; }
 .eyebrow { margin: 0 0 8px; font-size: 12px; letter-spacing: .18em; color: #8aa0b8; }
 h1 { margin: 0; max-width: 780px; font-size: clamp(32px, 5vw, 64px); line-height: .98; }
+h2 { margin: 0 0 6px; font-size: 24px; }
 .lede { max-width: 720px; color: #99a8b8; font-size: 17px; }
 .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; justify-content: flex-end; }
 .controls label { display: grid; gap: 5px; color: #9fb0c3; font-size: 12px; }
 button, select { border: 1px solid #273547; background: #152033; color: #fff; border-radius: 10px; min-height: 42px; padding: 0 14px; }
 button { cursor: pointer; }
 button.secondary { background: transparent; }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.danger { border-color: #553039; color: #e9b5bd; }
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; }
 .stats > div { border: 1px solid #1c2634; border-radius: 12px; padding: 14px; background: #0b111a; }
 .stats span { display: block; color: #7f92a7; font-size: 12px; margin-bottom: 5px; }
 .stats strong { font-size: 22px; }
 .canvas-wrap { overflow: hidden; border: 1px solid #1b2735; border-radius: 16px; background: #0c1118; }
 canvas { display: block; width: 100%; height: auto; aspect-ratio: 11 / 7; }
+.memory-panel { margin-top: 18px; border: 1px solid #1c2634; border-radius: 16px; padding: 18px; background: #0b111a; }
+.memory-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; }
+.memory-copy { margin: 0; color: #8598ac; font-size: 14px; max-width: 720px; }
+.memory-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.memory-timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 16px; }
+.memory-card { border: 1px solid #243245; background: #0e1723; border-radius: 12px; padding: 13px; min-width: 0; }
+.memory-card.active { border-color: #7599c4; background: #101d2b; }
+.memory-card .memory-gen { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px; }
+.memory-card strong { font-size: 18px; }
+.memory-card .badge { font-size: 10px; letter-spacing: .08em; color: #9eb2c9; border: 1px solid #2c3d51; border-radius: 999px; padding: 4px 7px; }
+.memory-card dl { margin: 0; display: grid; gap: 4px; }
+.memory-card dl div { display: flex; justify-content: space-between; gap: 10px; color: #8396aa; font-size: 12px; }
+.memory-card dd { margin: 0; color: #d8e3ef; }
+.memory-card button { width: 100%; margin-top: 10px; min-height: 36px; }
+.memory-empty { color: #72869b; font-size: 13px; padding: 12px 0 2px; }
+.memory-status { min-height: 18px; margin: 12px 0 0; color: #73869a; font-size: 12px; }
 .note { color: #6e8196; font-size: 12px; margin-top: 10px; }
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; align-items: start; }
   .controls { justify-content: flex-start; }
   .stats { grid-template-columns: repeat(2, 1fr); }
+  .memory-heading { align-items: start; flex-direction: column; }
+  .memory-actions { justify-content: flex-start; }
 }
