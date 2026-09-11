@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Madring AI Driver</title>
-  <link rel="stylesheet" href="./styles.css?v=20" />
+  <link rel="stylesheet" href="./styles.css?v=21" />
 </head>
 <body>
   <main class="app-shell">
@@ -90,11 +90,13 @@
           <div id="sceneCounter" class="scene-counter">GEN 1 · 1x · VUELTAS 0</div>
           <div id="lapReadout" class="scene-laps">MEJOR VUELTA --:--.--</div>
         </div>
+        <button id="expandMap" class="expand-btn" aria-label="Pantalla completa" title="Pantalla completa">⤢</button>
+        <div id="mapControls" class="map-controls" aria-label="Controles rápidos"></div>
         <button class="help-btn on-canvas" data-help="help-sim" aria-expanded="false" aria-label="Qué se ve en la simulación">?</button>
         <div class="help-pop on-canvas" id="help-sim" hidden>
           <p>Vista cenital del circuito MADRING en su barrio de Madrid. El coche <strong>cian</strong> es el líder de la generación; los demás se ven translúcidos (ajústalo en «Otros coches»).</p>
           <p>Las líneas blancas son los <strong>sensores</strong> (7 o 3, según el selector): cada uno mide la distancia libre hasta el borde de la pista en su dirección, y el número es esa distancia normalizada (1.00 = nada en 115 unidades). Es lo único que el cerebro «ve».</p>
-          <p>Los pianos rojo-blanco marcan las curvas; las gradas y el público están en el exterior de cada una. Arriba a la izquierda, el minimapa con la posición del líder.</p>
+          <p>Los pianos rojo-blanco marcan las curvas; las gradas y el público están en el exterior de cada una. Arriba a la izquierda, el minimapa con la posición del líder. El botón ⤢ de arriba a la derecha pone el mapa a pantalla completa con Pausa, Velocidad y Otros coches a mano; con Esc se vuelve.</p>
         </div>
       </section>
 
@@ -156,6 +158,6 @@
     </div>
   </main>
 
-  <script type="module" src="./src/app-v5.js?v=32"></script>
+  <script type="module" src="./src/app-v5.js?v=33"></script>
 </body>
 </html>

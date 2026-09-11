@@ -703,6 +703,27 @@ function resizeSim(){
 }
 new ResizeObserver(resizeSim).observe(canvasWrap);resizeSim();
 const sidePanels=document.querySelector('.side-panels');if(sidePanels)new ResizeObserver(layoutPanels).observe(sidePanels);layoutPanels();
+// ⤢ expand: the map fills the screen (Fullscreen API when allowed, fixed overlay otherwise) and the
+// live controls people need while watching — Pausa, Velocidad, Otros coches — move into a bar on the map.
+// The same elements are reparented and returned, so there is one control per setting.
+const expandBtn=document.querySelector('#expandMap'),mapControls=document.querySelector('#mapControls');
+const movable=[toggleRun,speedSelect.closest('label'),ghostSlider?.closest('label')].filter(Boolean);
+const homes=movable.map(el=>({el,parent:el.parentNode,next:el.nextSibling}));
+let mapExpanded=false;
+function setMapExpanded(on){
+  mapExpanded=on;document.body.classList.toggle('map-expanded',on);
+  if(on)for(const el of movable)mapControls.appendChild(el);else for(const h of homes)h.parent.insertBefore(h.el,h.next);
+  if(expandBtn){expandBtn.textContent=on?'⤡':'⤢';expandBtn.title=expandBtn.ariaLabel=on?'Salir de pantalla completa':'Pantalla completa';}
+  resizeSim();
+}
+if(expandBtn&&mapControls){
+  expandBtn.addEventListener('click',()=>{
+    if(!mapExpanded){setMapExpanded(true);if(canvasWrap.requestFullscreen)canvasWrap.requestFullscreen().catch(()=>{});}
+    else{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});setMapExpanded(false);}
+  });
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&mapExpanded)setMapExpanded(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mapExpanded&&!document.fullscreenElement)setMapExpanded(false);});
+}
 // «?» help toggles: one open at a time, click outside closes.
 const helpBtns=[...document.querySelectorAll('.help-btn')];
 function closeHelp(){for(const b of helpBtns){b.setAttribute('aria-expanded','false');const p=document.getElementById(b.dataset.help);if(p)p.hidden=true;}}
