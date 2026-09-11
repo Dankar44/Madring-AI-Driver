@@ -303,7 +303,7 @@ for(const b of blocks){
   if(b.kind==='urban')lotBuildings(b);
   if(b.kind==='park')for(let i=0;i<14;i++){const x=b.x+30+cityRng()*(b.w-60),y=b.y+30+cityRng()*(b.h-60);if(trackDistance(x,y)>110)trees.push({x,y,r:8+cityRng()*4});}
 }
-for(const cx of colsX)if(cx.kind==='avenue')for(const cy of rowsY)if(cy.kind==='avenue'){const x=(cx.a+cx.b)/2,y=(cy.a+cy.b)/2;if(trackDistance(x,y)>260)glorietas.push({x,y});}
+for(const cx of colsX)if(cx.kind==='avenue')for(const cy of rowsY)if(cy.kind==='avenue'){const x=(cx.a+cx.b)/2,y=(cy.a+cy.b)/2;if(trackDistance(x,y)>320)glorietas.push({x,y});}
 // Street trees line both pavements of every avenue.
 for(const cx of colsX)if(cx.kind==='avenue')for(let y=CITY.y0+50;y<CITY.y1;y+=105)for(const x of [cx.a-13,cx.b+13])if(trackDistance(x,y)>115)trees.push({x,y,r:7});
 for(const cy of rowsY)if(cy.kind==='avenue')for(let x=CITY.x0+50;x<CITY.x1;x+=105)for(const y of [cy.a-13,cy.b+13])if(trackDistance(x,y)>115)trees.push({x,y,r:7});
@@ -350,6 +350,8 @@ function drawCity(cull){
   for(const c of colsX)if(c.kind==='avenue'){const x=(c.a+c.b)/2;ctx.moveTo(x,CITY.y0);ctx.lineTo(x,CITY.y1);}
   for(const r of rowsY)if(r.kind==='avenue'){const y=(r.a+r.b)/2;ctx.moveTo(CITY.x0,y);ctx.lineTo(CITY.x1,y);}
   ctx.stroke();ctx.setLineDash([]);
+  // The closed-off fan zone: a continuous paved band around the circuit that cuts the street grid and its markings.
+  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#aeaba0';ctx.lineWidth=300;ctx.stroke(SCENERY.centerPath);
   for(const g of glorietas){if(cull&&!cull(g.x,g.y,AVENUE+10))continue;ctx.fillStyle='#6d7378';ctx.beginPath();ctx.arc(g.x,g.y,AVENUE*.95,0,Math.PI*2);ctx.fill();ctx.fillStyle='#7d9470';ctx.beginPath();ctx.arc(g.x,g.y,AVENUE*.42,0,Math.PI*2);ctx.fill();ctx.lineWidth=1.2;ctx.strokeStyle='#b9b6ad';ctx.stroke();}
   for(const p of pavilions){
     if(cull&&!cull(p.x+p.w/2,p.y+p.h/2,Math.hypot(p.w,p.h)/2+30))continue;const x=p.x+p.w/2,y=p.y+p.h/2;
@@ -707,7 +709,7 @@ const sidePanels=document.querySelector('.side-panels');if(sidePanels)new Resize
 // live controls people need while watching — Pausa, Velocidad, Otros coches — move into a bar on the map.
 // The same elements are reparented and returned, so there is one control per setting.
 const expandBtn=document.querySelector('#expandMap'),mapControls=document.querySelector('#mapControls');
-const movable=[toggleRun,speedSelect.closest('label'),ghostSlider?.closest('label')].filter(Boolean);
+const movable=[toggleRun,resetRun,speedSelect.closest('label'),ghostSlider?.closest('label')].filter(Boolean);
 const homes=movable.map(el=>({el,parent:el.parentNode,next:el.nextSibling}));
 let mapExpanded=false;
 function setMapExpanded(on){
