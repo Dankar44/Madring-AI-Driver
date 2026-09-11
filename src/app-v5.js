@@ -57,6 +57,9 @@ const MAX_STEPS=9200;
 const REAL_SCALE=2.84;
 const TRACK_SCALE=3.40*REAL_SCALE;
 const TRACK_HALF_WIDTH=25;
+// Half the track minus the car's own half-width: past this the body starts touching the white line.
+const SAFE_HALF_WIDTH=17;
+const EDGE_PENALTY=.9;
 const CAMERA_ZOOM_2D=2.65;
 const VIEW_KEY='madring-ai-driver-view-v5';
 const MEMORY_KEY='madring-ai-driver-memories-v1';
@@ -195,6 +198,11 @@ class Car{
       this.lastLapTime=lap;if(this.bestLapTime===null||lap<this.bestLapTime)this.bestLapTime=lap;
     }
     this.fitness+=Math.max(0,wrappedDelta)*2350+headingAlignment*.03+this.speed*.003;
+    // Hugging the edge is the shortest path and nothing used to discourage it, so the cars learned to
+    // ride the white line. Tax the last stretch before it, ramping up quadratically: clipping an apex
+    // still pays off, driving the whole lap on the line does not.
+    const over=Math.max(0,n.d-SAFE_HALF_WIDTH)/(track.halfWidth-SAFE_HALF_WIDTH);
+    if(over>0)this.fitness-=over*over*EDGE_PENALTY;
     if(this.laps===0&&n.progress>this.maxProgress&&n.progress-this.maxProgress<.2)this.maxProgress=n.progress;
     this.lastProgress=n.progress;
     if(!onTrack(this.x,this.y)||this.steps>MAX_STEPS){this.alive=false;if(!onTrack(this.x,this.y))this.fitness-=4;}
