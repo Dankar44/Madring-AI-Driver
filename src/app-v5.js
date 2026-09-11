@@ -26,7 +26,7 @@ const SIM_HZ=60;
 const RECORDING=params.get('rec')==='1';
 // Global pace: every speed setting runs this fraction of its nominal steps per frame (1x = 0.6 steps/frame).
 const SPEED_SCALE=.6;
-const SPEEDS=[.25,.5,1,5,20,50];const START_SPEED=SPEEDS.includes(Number(params.get('speed')))?Number(params.get('speed')):1;
+const SPEEDS=[.25,.5,1,5,10,50];const START_SPEED=SPEEDS.includes(Number(params.get('speed')))?Number(params.get('speed')):1;
 let ghostAlpha=Math.max(0,Math.min(1,(Number(params.get('ghost'))||35)/100)); // opacity of the non-leader cars in the follow view
 // Sensor rigs. Each car carries its own rig, so a 3-sensor memory can replay while a 7-sensor
 // population keeps training. `think` is the whole brain: CFG7 is the original 13-weight formula, untouched.
