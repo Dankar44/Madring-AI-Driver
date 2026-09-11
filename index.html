@@ -1,26 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Madring AI Driver</title>
-  <link rel="stylesheet" href="./styles.css?v=6" />
+  <link rel="stylesheet" href="./styles.css?v=20" />
 </head>
 <body>
   <main class="app-shell">
-    <section class="hero">
-      <div>
+    <header class="topbar">
+      <div class="brand">
         <p class="eyebrow">MADRING AI DRIVER</p>
-        <h1>Watch an AI learn Madrid’s new F1 circuit.</h1>
-        <p class="lede">Switch between a 2D training view and a real 3D orthographic isometric scene.</p>
+        <h1>Mira cómo una IA aprende el nuevo circuito de F1 de Madrid.</h1>
       </div>
       <div class="controls">
-        <button id="toggleRun">Pause</button>
-        <button id="resetRun" class="secondary">Reset training</button>
-        <button id="saveMemory" class="secondary">Save memory</button>
+        <button id="toggleRun">Pausa</button>
+        <button id="resetRun" class="secondary">Reiniciar</button>
+        <button id="saveMemory" class="secondary">Guardar memoria</button>
         <label>
-          Speed
+          Velocidad
           <select id="speedSelect">
+            <option value="0.25">0.25x (lenta)</option>
+            <option value="0.5">0.5x</option>
             <option value="1">1x</option>
             <option value="5">5x</option>
             <option value="20">20x</option>
@@ -28,59 +29,133 @@
           </select>
         </label>
         <label>
-          View
+          Vista
           <select id="viewSelect">
-            <option value="top">Top-down</option>
-            <option value="iso">3D isometric</option>
+            <option value="top">Seguir al líder</option>
+            <option value="swarm">Circuito completo</option>
           </select>
         </label>
+        <label>
+          Sensores
+          <select id="sensorSelect">
+            <option value="7">7 sensores</option>
+            <option value="3">3 sensores</option>
+          </select>
+        </label>
+        <label class="slider">
+          Otros coches
+          <input type="range" id="ghostAlpha" min="0" max="100" value="35" aria-label="Opacidad de los demás coches" />
+        </label>
+        <button class="help-btn" data-help="help-controls" aria-expanded="false" aria-label="Qué hace cada control">?</button>
+        <div class="help-pop wide" id="help-controls" hidden>
+          <ul>
+            <li><strong>Pausa</strong><span>Detiene la simulación sin perder nada.</span></li>
+            <li><strong>Reiniciar</strong><span>Vuelve a la generación 1 con cerebros aleatorios. Las memorias guardadas se conservan.</span></li>
+            <li><strong>Guardar memoria</strong><span>Congela el mejor cerebro de este momento para reproducirlo después.</span></li>
+            <li><strong>Velocidad</strong><span>Pasos de simulación por fotograma. Por debajo de 1x va a cámara lenta.</span></li>
+            <li><strong>Vista</strong><span>Cámara siguiendo al líder, o el circuito completo con todos los coches.</span></li>
+            <li><strong>Sensores</strong><span>Cuántos rayos «ve» el coche: 7 o 3. Cambiarlo reinicia el entrenamiento; sirve para comparar cuánto tarda en aprender con menos vista.</span></li>
+            <li><strong>Otros coches</strong><span>Opacidad del resto del pelotón en la vista de seguimiento.</span></li>
+          </ul>
+        </div>
       </div>
-    </section>
+    </header>
 
     <section class="stats" aria-live="polite">
-      <div><span>Generation</span><strong id="generation">1</strong></div>
-      <div><span>Alive</span><strong id="alive">0</strong></div>
-      <div><span>Best progress</span><strong id="bestProgress">0%</strong></div>
-      <div><span>Best fitness</span><strong id="bestFitness">0</strong></div>
-      <div><span>Best laps</span><strong id="bestLaps">0</strong></div>
-    </section>
-
-    <section class="canvas-wrap top-view" id="canvasWrap">
-      <canvas id="sim" width="820" height="920" aria-label="Top-down autonomous driving simulation on MADRING"></canvas>
-      <canvas id="threeSim" width="820" height="920" aria-label="3D orthographic autonomous driving simulation on MADRING"></canvas>
-      <canvas id="sensorOverlay" width="820" height="920" aria-hidden="true"></canvas>
-      <div class="scene-hud" aria-hidden="true">
-        <canvas id="minimap" width="205" height="112"></canvas>
-        <div id="sceneTitle" class="scene-title">AI LEARNS MADRING</div>
-        <div id="sceneCounter" class="scene-counter">GEN 1 · 1x · LAPS 0</div>
+      <div><span>Generación</span><strong id="generation">1</strong></div>
+      <div><span>Vivos</span><strong id="alive">0</strong></div>
+      <div><span>Mejor progreso</span><strong id="bestProgress">0%</strong></div>
+      <div><span>Mejor fitness</span><strong id="bestFitness">0</strong></div>
+      <div><span>Vueltas</span><strong id="bestLaps">0</strong></div>
+      <div><span>Mejor vuelta</span><strong id="bestLap">--:--.--</strong></div>
+      <button class="help-btn" data-help="help-stats" aria-expanded="false" aria-label="Qué significan las estadísticas">?</button>
+      <div class="help-pop wide" id="help-stats" hidden>
+        <ul>
+          <li><strong>Generación</strong><span>Ronda de entrenamiento actual. Cuando todos los coches se estrellan o agotan el tiempo, los mejores se clonan con mutaciones y empieza la siguiente.</span></li>
+          <li><strong>Vivos</strong><span>Coches que siguen en pista de los 100 que salen.</span></li>
+          <li><strong>Mejor progreso</strong><span>Porcentaje del circuito recorrido por el mejor coche de esta generación.</span></li>
+          <li><strong>Mejor fitness</strong><span>Puntuación acumulada: avanzar suma, salirse resta y cada vuelta completa suma 1.400.</span></li>
+          <li><strong>Vueltas</strong><span>Vueltas completas del mejor coche visto hasta ahora.</span></li>
+          <li><strong>Mejor vuelta</strong><span>Tiempo de la vuelta más rápida registrada hasta ahora.</span></li>
+        </ul>
       </div>
     </section>
 
-    <p class="sim-note"><span id="viewStatus">Top-down view</span> · smooth view transition · urban 3D scenery · grandstands · apartments · trees · flat HUD.</p>
-
-    <section class="memory-panel">
-      <div class="memory-heading">
-        <div>
-          <p class="eyebrow">TRAINING MEMORY</p>
-          <h2>Neural checkpoints</h2>
-          <p class="memory-copy">Snapshots store the best genome from that moment. Replay an old memory without deleting the current training.</p>
+    <div class="dash">
+      <section class="canvas-wrap" id="canvasWrap">
+        <canvas id="sim" width="820" height="920" aria-label="Simulación cenital de conducción autónoma en MADRING"></canvas>
+        <div class="scene-hud" aria-hidden="true">
+          <canvas id="minimap" width="205" height="112"></canvas>
+          <div id="sceneTitle" class="scene-title">LA IA APRENDE MADRING</div>
+          <div id="sceneCounter" class="scene-counter">GEN 1 · 1x · VUELTAS 0</div>
+          <div id="lapReadout" class="scene-laps">MEJOR VUELTA --:--.--</div>
         </div>
-        <div class="memory-actions">
-          <button id="resumeTraining" class="secondary" disabled>Return to current training</button>
-          <button id="clearMemories" class="secondary danger">Clear memories</button>
+        <button class="help-btn on-canvas" data-help="help-sim" aria-expanded="false" aria-label="Qué se ve en la simulación">?</button>
+        <div class="help-pop on-canvas" id="help-sim" hidden>
+          <p>Vista cenital del circuito MADRING en su barrio de Madrid. El coche <strong>cian</strong> es el líder de la generación; los demás se ven translúcidos (ajústalo en «Otros coches»).</p>
+          <p>Las líneas blancas son los <strong>sensores</strong> (7 o 3, según el selector): cada uno mide la distancia libre hasta el borde de la pista en su dirección, y el número es esa distancia normalizada (1.00 = nada en 115 unidades). Es lo único que el cerebro «ve».</p>
+          <p>Los pianos rojo-blanco marcan las curvas; las gradas y el público están en el exterior de cada una. Arriba a la izquierda, el minimapa con la posición del líder.</p>
         </div>
-      </div>
-      <div id="memoryTimeline" class="memory-timeline" aria-live="polite"></div>
-      <p id="memoryStatus" class="memory-status">Automatic memories will appear at generations 1, 5, 10, 25, 50, 100 and every 50 generations after that.</p>
-    </section>
+      </section>
 
-    <p class="note">Switching views now crossfades and eases between the 2D and 3D renderers instead of cutting instantly. The minimap, title and counters remain fixed as a flat HUD throughout the move.</p>
+      <aside class="side-panels">
+        <section class="panel fit">
+          <div class="panel-head">
+            <div><p class="eyebrow">CEREBRO EN DIRECTO</p><h2>Red neuronal</h2></div>
+            <button class="help-btn" data-help="help-brain" aria-expanded="false" aria-label="Cómo leer la red neuronal">?</button>
+            <div class="help-pop" id="help-brain" hidden>
+              <p>El cerebro del líder funcionando en directo. A la izquierda, lo que <strong>ve</strong>: cada sensor con su valor (1.00 = pista libre, 0.10 = pared encima); el «sesgo» vale siempre 1. A la derecha, lo que <strong>decide</strong>: dirección (izquierda/derecha), acelerador y freno, con su barra.</p>
+              <p>Cada línea es una conexión con un <strong>peso fijo</strong> que la evolución afina entre generaciones: verde empuja la decisión hacia arriba, rojo discontinuo hacia abajo, y el grosor dice cuánto manda. Lo que se mueve es la <strong>señal</strong>: la línea brilla y corren puntos por ella cuando el sensor está aportando algo ahora mismo.</p>
+              <p>Dos detalles: el círculo ○ en la conexión al freno indica que llega invertida (frena cuando el sensor central ve pared cerca), y la curva entre dirección y freno significa que el freno también lee cuánto está girando el coche.</p>
+            </div>
+          </div>
+          <p class="panel-copy" id="brainCopy">El genoma del coche líder en tiempo real: 7 sensores + sesgo que alimentan dirección, acelerador y freno mediante 13 pesos.</p>
+          <canvas id="brainCanvas" width="360" height="300" aria-label="Red neuronal en directo del coche líder"></canvas>
+          <p class="legend"><span class="sw pos"></span>empuja hacia arriba <span class="sw neg"></span>empuja hacia abajo (discontinuo) · grosor = cuánto manda · brillo y puntos = señal ahora</p>
+        </section>
+
+        <section class="panel fit">
+          <div class="panel-head">
+            <div><p class="eyebrow">PROGRESO</p><h2>Fitness por generación</h2></div>
+            <button class="help-btn" data-help="help-fitness" aria-expanded="false" aria-label="Cómo leer la gráfica">?</button>
+            <div class="help-pop" id="help-fitness" hidden>
+              <p>Cómo avanza el aprendizaje. La línea <strong>cian</strong> es el mejor coche de cada generación; la <strong>ámbar</strong>, la media de toda la población.</p>
+              <p>Si la cian sube a escalones, la evolución ha encontrado un cerebro mejor; si se aplana, se ha estancado. Pasa el ratón por encima para ver los valores de una generación.</p>
+              <p><strong>Correr carrera</strong>: elige dos o más cerebros en sus tarjetas («Elegir») y salen a la vez desde la meta, cada uno con su color y su etiqueta. Aquí debajo va la clasificación en directo: primero quien completa la vuelta (y en cuánto), después quien llega más lejos.</p>
+            </div>
+          </div>
+          <canvas id="fitnessChart" width="340" height="200" aria-label="Fitness del mejor coche y media por generación"></canvas>
+          <p class="legend"><span class="sw best"></span>mejor coche <span class="sw avg"></span>media de la población</p>
+          <div class="race">
+            <button id="raceBtn" class="secondary" disabled>Correr carrera</button>
+            <ol id="raceStandings" class="race-standings" aria-live="polite"></ol>
+          </div>
+        </section>
+
+        <section class="panel memory-panel">
+          <div class="memory-heading">
+            <div>
+              <p class="eyebrow">MEMORIA</p>
+              <h2>Puntos de control</h2>
+              <p class="memory-copy">Cada instantánea guarda el mejor genoma de ese momento. Reproduce una memoria antigua sin borrar el entrenamiento actual.</p>
+            </div>
+            <div class="memory-actions">
+              <button id="resumeTraining" class="secondary" disabled>Volver al entrenamiento</button>
+              <button id="clearMemories" class="secondary danger">Borrar memorias</button>
+              <button class="help-btn" data-help="help-memory" aria-expanded="false" aria-label="Qué son las memorias">?</button>
+              <div class="help-pop" id="help-memory" hidden>
+                <p>Instantáneas del mejor cerebro, guardadas solas en las generaciones 1, 5, 10, 25, 50, 100 y cada 50 después, o a mano con «Guardar memoria». Cada tarjeta muestra progreso, fitness, vueltas y mejor tiempo.</p>
+                <p><strong>Reproducir</strong> pone ese cerebro a correr solo en pista sin tocar el entrenamiento en curso; <strong>Elegir</strong> lo apunta a la carrera (botón «Correr carrera», en el panel de la gráfica); <strong>Volver al entrenamiento</strong> retoma el entrenamiento donde estaba.</p>
+              </div>
+            </div>
+          </div>
+          <div id="memoryTimeline" class="memory-timeline" aria-live="polite"></div>
+          <p id="memoryStatus" class="memory-status">Las memorias automáticas aparecerán en las generaciones 1, 5, 10, 25, 50, 100 y cada 50 después.</p>
+        </section>
+      </aside>
+    </div>
   </main>
 
-  <script type="module">
-    await import('./src/environment-v7.js?v=1');
-    await import('./src/app-v5.js?v=4');
-    await import('./src/view-transition-v8.js?v=1');
-  </script>
+  <script type="module" src="./src/app-v5.js?v=32"></script>
 </body>
 </html>
