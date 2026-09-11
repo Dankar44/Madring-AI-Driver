@@ -119,18 +119,15 @@ button.danger { border-color: #553039; color: #e9b5bd; }
 .help-pop.on-canvas { top: auto; bottom: 50px; left: 14px; right: auto; }
 .memory-panel .help-pop { top: auto; bottom: calc(100% + 8px); }
 
-/* ⤢ — the map takes the whole screen; Pausa, Velocidad and Otros coches move into a floating bar. */
+/* ⤢ — the map widens into the panels' half of the dashboard; the header keeps its controls. */
 .expand-btn { position: absolute; top: 14px; right: 14px; z-index: 6; width: 30px; height: 30px; min-height: 0; padding: 0; border-radius: 8px; background: rgba(7,10,15,.72); border-color: #2c3d51; color: #eef2f7; font-size: 16px; line-height: 1; }
 .expand-btn:hover { background: #1cc0d2; border-color: #1cc0d2; color: #06232a; }
-.map-controls { position: absolute; top: 14px; right: 52px; z-index: 6; display: none; gap: 8px; align-items: end; padding: 6px 8px; border-radius: 12px; background: rgba(7,10,15,.72); backdrop-filter: blur(6px); }
-.map-expanded .map-controls { display: flex; }
-.map-controls label { display: grid; gap: 4px; color: #9fb0c3; font-size: 11px; }
-.map-controls .slider input { width: 100px; margin: 0; accent-color: #1cc0d2; height: 36px; }
-.map-expanded .canvas-wrap { position: fixed; inset: 0; z-index: 60; width: 100vw; height: 100vh; border: 0; border-radius: 0; }
-.map-expanded .scene-title { font-size: clamp(20px, 3.2vh, 42px); }
-.map-expanded .scene-counter { font-size: clamp(12px, 1.6vh, 20px); top: calc(14px + 4vh); }
-.map-expanded .scene-laps { font-size: clamp(13px, 1.8vh, 24px); }
-.map-expanded #minimap { width: 18%; }
+.map-expanded .dash { grid-template-columns: minmax(0, 1fr); }
+.map-expanded .side-panels { display: none; }
+.map-expanded .scene-title { font-size: clamp(20px, 3.2vh, 40px); }
+.map-expanded .scene-counter { font-size: clamp(12px, 1.6vh, 18px); }
+.map-expanded .scene-laps { font-size: clamp(13px, 1.8vh, 22px); }
+.map-expanded #minimap { width: 16%; }
 .recording .expand-btn { display: none; }
 
 /* ?rec=1 — recording mode: only the canvas and its flat HUD, nothing else on screen. */
